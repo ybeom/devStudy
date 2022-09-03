@@ -3,26 +3,15 @@ import React, { useState } from "react";
 import ExpensesMap from "./ExpensesMap";
 import ExpensesFilter from "./ExpensesFilter";
 import Card from "../UI/Card";
+import ExpensesChart from "./ExpensesChart";
+
 import "./ExpenseItems.css";
 
 const ExpenseItems = (props) => {
     const [filteredYear, setFilteredYear] = useState("ALL");
-    // const [filteredExpenses, setFilteredExpenses] = useState(props.expenses);
 
     const filterChangeHandler = (selectYear) => {
         setFilteredYear(selectYear);
-
-        // let expensesFilter = [];
-        // if (selectYear === "ALL") {
-        //     expensesFilter = props.expenses;
-        // } else {
-        //     props.expenses.filter((expense) => {
-        //         if (expense.date.getFullYear().toString() === selectYear) {
-        //             expensesFilter = [...expensesFilter, expense];
-        //         }
-        //     });
-        // }
-        // setFilteredExpenses(expensesFilter);
     };
 
     const filteredExpenses = props.expenses.filter((expense) => {
@@ -33,16 +22,14 @@ const ExpenseItems = (props) => {
         }
     });
 
-    let expensesItemsContent = <p>No Expenses Found.</p>;
-    if (filteredExpenses.length > 0) {
-        expensesItemsContent = <ExpensesMap expenses={filteredExpenses} />;
-    }
-
     return (
-        <Card className="expenses">
-            <ExpensesFilter selected={filteredYear} onFilterSelected={filterChangeHandler} />
-            {expensesItemsContent}
-        </Card>
+        <div>
+            <Card className="expenses">
+                <ExpensesFilter selected={filteredYear} onFilterSelected={filterChangeHandler} />
+                <ExpensesChart expenses={filteredExpenses} />
+                <ExpensesMap expenses={filteredExpenses} />;
+            </Card>
+        </div>
     );
 };
 

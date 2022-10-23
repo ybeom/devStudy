@@ -1,6 +1,6 @@
-const http = require("http");
 const fs = require("fs");
-const server = http.createServer((req, res) => {
+
+const requestHandler = (req, res) => {
     const url = req.url;
     const method = req.method;
     if (url === "/") {
@@ -18,11 +18,11 @@ const server = http.createServer((req, res) => {
         req.on("end", () => {
             const parsedBody = Buffer.concat(requestBody).toString();
             const message = parsedBody.split("=")[1];
-            fs.writeFileSync("message.txt", message);
+            fs.writeFile("message.txt", message, (err) => {
+                res.writeHead(302, { Location: "/" });
+                return res.end();
+            });
         });
-        res.writeHead(302, { Location: "/" });
-
-        return res.end();
     }
     res.setHeader("Content-Type", "text/html");
     res.write("<html>");
@@ -30,6 +30,6 @@ const server = http.createServer((req, res) => {
     res.write("<body><h1>Hello from my Node.js Server!</h1></body>");
     res.write("</html>");
     res.end();
-});
+};
 
-server.listen(3001);
+module.exports = requestHandler;

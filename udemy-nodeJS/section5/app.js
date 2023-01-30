@@ -1,13 +1,15 @@
 const path = require("path");
 const express = require("express");
 const app = express();
+const { adminData, shopRouter } = require("./routes");
 
-const { adminRouter, shopRouter } = require("./routes");
+app.set("view engine", "pug");
+app.set("views", "views");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/admin", adminRouter);
+app.use("/admin", adminData.routes);
 app.use("/", shopRouter);
 
 app.use("/", (req, res, next) => {
